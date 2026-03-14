@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Live Code Editor</title>
+  <style>
+    body {
+      margin: 0;
+      display: flex;
+      height: 100vh;
+      font-family: Arial, sans-serif;
+    }
+    textarea {
+      width: 50%;
+      height: 100%;
+      border: none;
+      padding: 10px;
+      font-family: monospace;
+      font-size: 14px;
+      outline: none;
+      resize: none;
+    }
+    iframe {
+      width: 50%;
+      height: 100%;
+      border: none;
+      background: #fff;
+    }
+  </style>
+</head>
+<body>
+  <textarea id="editor">
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { font-family: sans-serif; text-align: center; margin-top: 20%; }
+    h1 { color: purple; }
+  </style>
+</head>
+<body>
+  <h1>Hello World!</h1>
+  <p>Edit the code on the left and see results here.</p>
+</body>
+</html>
+  </textarea>
+
+  <iframe id="preview"></iframe>
+
+  <script>
+    const editor = document.getElementById('editor');
+    const preview = document.getElementById('preview');
+
+    function updatePreview() {
+      const code = editor.value;
+      preview.srcdoc = code;
+    }
+
+    editor.addEventListener('input', updatePreview);
+    window.onload = updatePreview;
+  </script>
+</body>
+</html>
