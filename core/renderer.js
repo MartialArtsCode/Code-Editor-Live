@@ -4,37 +4,37 @@ const preview=document.getElementById("preview")
 
 export function render(){
 
-const doc=`
+  const doc=
 
-<!DOCTYPE html>
+  <!DOCTYPE html>
 
-<html>
+  <html>
 
-<head>
+    <head>
 
-<style>
-${project.files.css}
-</style>
+      <style>
+      ${project.files.css}
+      </style>
 
-</head>
+    </head>
 
-<body>
+    <body>
+    
+      ${project.files.html}
+    
+      <script>
+    
+        ${project.files.js}
+    
+      </script>
+    
+    </body>
 
-${project.files.html}
-
-<script>
-
-${project.files.js}
-
-</script>
-
-</body>
-
-</html>
-
-`
-
-preview.srcdoc=doc
+  </html>
+        
+  
+  
+  preview.srcdoc=doc
 
 }
 
