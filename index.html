@@ -40,9 +40,44 @@
     
     <div id="navigator"></div>
     
-    <textarea id="editor"></textarea>
+    <div id="editor"></div>
     
     <iframe id="preview"></iframe>
+
+    <script src="https://unpkg.com/monaco-editor@0.45.0/min/vs/loader.js">
+      require.config({
+        paths: {
+          vs: "https://unpkg.com/monaco-editor@0.45.0/min/vs"
+        }
+      });
+
+      require(["vs/editor/editor.main"], function () {
+
+        window.editor = monaco.editor.create(document.getElementById("editor"), {
+
+          value: '<h1>Hello World<h1>
+            
+      console.log("Editor Ready")
+    
+            language: "html",
+
+            theme: "vs-dark",
+
+            automaticLayout: true,
+
+            tabSize: 4,
+
+            insertSpaces: true,
+
+            minimap: {
+                enabled: true
+                
+            }
+    
+         });
+    
+    });
+          
 
     <script type="module">
 
