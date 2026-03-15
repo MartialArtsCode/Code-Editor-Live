@@ -1,70 +1,59 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Live Code Editor</title>
+<title>Web IDE</title>
 
 <style>
-body {
-    margin: 0;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    font-family: sans-serif;
+
+body{
+margin:0;
+display:grid;
+grid-template-columns:250px 1fr 1fr;
+height:100vh;
+font-family:sans-serif;
 }
 
-h1 {
-    text-align: center;
-    color: purple;
-    margin: 10px 0;
+#navigator{
+background:#111;
+color:white;
+padding:10px;
 }
 
-.container {
-    flex: 1;
-    display: flex;
+#editor{
+width:100%;
+height:100%;
+border:none;
+font-family:monospace;
 }
 
-#editor {
-    width: 50%;
-    height: 100%;
-    border: none;
-    padding: 10px;
-    font-family: monospace;
-    font-size: 14px;
-    outline: none;
-    resize: none;
+#preview{
+width:100%;
+height:100%;
+border:none;
 }
 
-#preview {
-    width: 50%;
-    height: 100%;
-    border: none;
-    background: #fff;
-}
 </style>
 </head>
 
 <body>
 
-<h1>Live Code Editor</h1>
+<div id="navigator"></div>
 
-<div class="container">
 <textarea id="editor"></textarea>
+
 <iframe id="preview"></iframe>
-</div>
 
-<script>
-const editor = document.getElementById("editor");
-const preview = document.getElementById("preview");
+<script type="module">
 
-function updatePreview() {
-    preview.srcdoc = editor.value;
-}
+import "./core/projectManager.js"
+import "./core/modeController.js"
+import "./ui/editorPanel.js"
+import "./ui/fileNavigator.js"
+import "./core/renderer.js"
+import "./visualization/dependencyGraph.js"
+import "./backend/mockServer.js"
 
-editor.addEventListener("input", updatePreview);
-
-window.addEventListener("load", updatePreview);
 </script>
 
 </body>
