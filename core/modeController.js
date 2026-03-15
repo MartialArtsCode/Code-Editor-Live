@@ -1,23 +1,25 @@
-export const modes = {
-
-MONOLITHIC:"monolithic",
-MODULAR:"modular",
-FULLSTACK:"fullstack"
+export const modes={
+  
+  MONOLITHIC:"monolithic",
+  MODULAR:"modular",
+  FULLSTACK:"fullstack"
 
 }
 
 let currentMode=modes.MONOLITHIC
 
-export function setMode(mode){
+const selector=document.getElementById("modeSelector")
 
-currentMode=mode
+selector.addEventListener("change",e=>{
 
-document.body.dataset.mode=mode
+  currentMode=e.target.value
 
-}
+  document.body.dataset.mode=currentMode
+
+})
 
 export function getMode(){
 
-return currentMode
+  return currentMode
 
 }
