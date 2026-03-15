@@ -1,95 +1,98 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
   <head>
-    <meta charset="UTF-8">   
-  <title>Web IDE</title>
+    <meta charset="UTF-8">
+    <title>Browser IDE</title>
     
     <style>
+      
       body{
         margin:0;
-        display:grid;
-        grid-template-columns:250px 1fr 1fr;
         height:100vh;
+        display:grid;
+        grid-template-columns:220px 1fr 1fr;
         font-family:sans-serif;
+        background:#1e1e1e;
+        color:white;
       }
       
       #navigator{
         background:#111;
-        color:white;
         padding:10px;
+        overflow:auto;
       }
       
       #editor{
-        tab-size: 4;
-        white-space: pre;
+        height:100%;
+      }
+      
+      #preview{
+        border:none;
         width:100%;
         height:100%;
-        border:none;
-        font-family:monospace;
+        background:white;
+      }
+      
+      #modeBar{
+        position:absolute;
+        top:10px;
+        right:10px;
+        z-index:10;
+      }
+      
+      button{
+        display:block;
+        width:100%;
+        margin-bottom:5px;
+      }
+      
+      canvas{
+        position:absolute;
+        bottom:0;
+        right:0;
+        width:300px;
+        height:200px;
+        background:#000;
       }
 
-      #preview{
-        width:100%;
-        height:100%;
-        border:none;
-      }
     </style>
+
   </head>
-  
+
   <body>
-    
+
     <div id="navigator"></div>
-    
+
     <div id="editor"></div>
-    
+
     <iframe id="preview"></iframe>
 
-    <script src="https://unpkg.com/monaco-editor@0.45.0/min/vs/loader.js">
-      require.config({
-        paths: {
-          vs: "https://unpkg.com/monaco-editor@0.45.0/min/vs"
-        }
-      });
+    <canvas id="graph"></canvas>
 
-      require(["vs/editor/editor.main"], function () {
-
-        window.editor = monaco.editor.create(document.getElementById("editor"), {
-
-          value: '<h1>Hello World<h1>
-            
-      console.log("Editor Ready")
+    <div id="modeBar">
+      <select id="modeSelector">
+        <option value="monolithic">Monolithic</option>
+        <option value="modular">Modular</option>
+        <option value="fullstack">Fullstack</option>
+      </select>
+    </div>
     
-            language: "html",
-
-            theme: "vs-dark",
-
-            automaticLayout: true,
-
-            tabSize: 4,
-
-            insertSpaces: true,
-
-            minimap: {
-                enabled: true
-                
-            }
-    
-         });
-    
-    });
-          
+    <script src="https://unpkg.com/monaco-editor@0.45.0/min/vs/loader.js"></script>
 
     <script type="module">
 
       import "./core/projectManager.js"
-      import "./core/modeController.js"
+        import "./core/renderer.js"
+          import "./core/modeController.js"
+            
       import "./ui/editorPanel.js"
-      import "./ui/fileNavigator.js"
-      import "./core/renderer.js"
+        import "./ui/fileNavigator.js"
+
+      
       import "./visualization/dependencyGraph.js"
-      import "./backend/mockServer.js"
-    
+        import "./backend/mockServer.js"
+
     </script>
-  
+
   </body>
 </html>
