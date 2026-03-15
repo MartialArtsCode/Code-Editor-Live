@@ -1,30 +1,30 @@
 export const project={
+  
+  files:{
+    html:'<h1>Hello IDE</h1>
+      <button onclick="loadUsers()">Load Users</button>
+      <ul id="users"></ul>',
+      
+      css:body{
+      font-family:sans-serif;
+      },
 
-files:{
-html:`<h1>Hello IDE</h1>
-<button onclick="loadUsers()">Load Users</button>
-<ul id="users"></ul>`,
+js: async function loadUsers(){
+  
+  const res = await fetch("/api/users")
+    const users = await res.json()
 
-css:`body{
-font-family:sans-serif;
-}`,
+  const ul=document.getElementById("users")
 
-js:`async function loadUsers(){
+  users.forEach(u=>{
+    const li=document.createElement("li")
+      li.textContent=u.name
+        ul.appendChild(li)
+  })
 
-const res = await fetch("/api/users")
-const users = await res.json()
+},
 
-const ul=document.getElementById("users")
-
-users.forEach(u=>{
-const li=document.createElement("li")
-li.textContent=u.name
-ul.appendChild(li)
-})
-
-}`,
-
-backend:`/api/users`
+backend: /api/users
 },
 
 active:"html"
