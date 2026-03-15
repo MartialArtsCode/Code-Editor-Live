@@ -1,43 +1,26 @@
-import {project} from "./projectManager.js"
+import { project } from "./projectManager.js";
 
-const preview=document.getElementById("preview")
+const preview = document.getElementById("preview");
 
-export function render(){
+export function render() {
+    const doc = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <style>
+                ${project.files.css}
+            </style>
+        </head>
+        <body>
+            ${project.files.html}
+            <script>
+                ${project.files.js}
+            </script>
+        </body>
+        </html>
+    `;
 
-  const doc=
-    
-    <!DOCTYPE html>
-    
-    <html>
-
-    <head>
-
-    <style>
-    
-    ${project.files.css}
-  
-  </style>
-
-    </head>
-
-    <body>
-    
-    ${project.files.html}
-    
-  <script>
-    
-    ${project.files.js}
-    
-  </script>
-    
-    </body>
-
-    </html>
-        
-  
-
-  preview.srcdoc=doc
-
+    preview.srcdoc = doc;
 }
 
-setInterval(render,500)
+setInterval(render, 500);
