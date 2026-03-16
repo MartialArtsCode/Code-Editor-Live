@@ -92,3 +92,6 @@ function matchRoute(path, route) {
   });
   return params;
 }
+// Expose to global scope so files.js can call it
+window.updatePreview = updatePreview;
+window.updateGraph = updateGraph;   // if needed in other files
