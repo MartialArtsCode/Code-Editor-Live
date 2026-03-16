@@ -2,6 +2,23 @@ let files = {};
 let currentFile = null;
 const isMobile = window.innerWidth <= 800;
 
+function addNewFile() {
+  const path = prompt("Full path (folders supported):\nexample: src/components/Button.js", "index.html");
+  if (!path) return;
+  const ext = path.split('.').pop().toLowerCase();
+  let defaultContent = '// New file';
+  if (ext === 'html') defaultContent = '<!DOCTYPE html>\n<html><head><title>New</title></head><body><h1>Hello</h1></body></html>';
+  if (ext === 'css') defaultContent = '/* New styles */\nbody {}';
+  if (ext === 'py') defaultContent = 'print("Hello from Python")';
+  if (ext === 'json') defaultContent = '{\n  "key": "value"\n}';
+  if (ext === 'md') defaultContent = '# Markdown';
+
+  files[path] = defaultContent;
+  updateFileList();
+  switchFile(path);
+  saveToStorage();
+}
+
 function loadFromStorage() {
   const saved = localStorage.getItem('browser-ide-files');
   if (saved) files = JSON.parse(saved);
