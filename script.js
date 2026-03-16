@@ -53,10 +53,6 @@ function loadFromStorage() {
   if (saved) {
     files = JSON.parse(saved);
   }
-  if (Object.keys(files).length === 0) {
-    // fallback to default monolithic
-    files = { ...starterTemplates.monolithic };
-  }
   currentFile = Object.keys(files).find(f => f.endsWith('.html')) || null;
 }
 
@@ -198,7 +194,13 @@ function updatePreview() {
   errorBox.innerHTML = '';
 
   let htmlFile = Object.keys(files).find(f => f.endsWith('.html')) || null;
-  let html = files[htmlFile] || '<h1>No HTML file found</h1>';
+  if (!htmlFile) {
+    doc.open();
+    doc.write('<h2 style="text-align:center; color:#666; padding:40px;">No HTML file found<br><small>Add one with +HTML button or switch mode</small></h2>');
+    doc.close();
+    return;
+  }
+  let html = files[htmlFile] || '';
 
   // Inject CSS & JS (simple concatenation for demo)
   const css = Object.keys(files).filter(f => f.endsWith('.css')).map(f => files[f]).join('\n');
@@ -297,7 +299,8 @@ function updateGraph() {
 }
 
 function loadMode(mode) {
-  if (!confirm(`Load ${mode} template? (current files replaced)`)) return;
+  const hasExistingFiles = Object.keys(files).length > 0;
+  if (hasExistingFiles && !confirm(`Load ${mode} template? (current files replaced)`)) return;
   files = { ...starterTemplates[mode] };
   currentFile = Object.keys(files).find(f => f.endsWith('.html')) || null;
   updateFileList();
@@ -310,7 +313,17 @@ const starterTemplates = { /* ... copy from previous version ... */ };
 
 document.addEventListener('DOMContentLoaded', () => {
   loadFromStorage();
+
+  // If storage was empty, force the default monolithic template.
+  if (Object.keys(files).length === 0) {
+    console.log('No files in storage — loading default monolithic template');
+    loadMode('monolithic');
+  }
+
   updateFileList();
+  if (!currentFile) {
+    currentFile = Object.keys(files).find(f => f.endsWith('.html')) || null;
+  }
   switchFile(currentFile);
 
   initMonaco();
