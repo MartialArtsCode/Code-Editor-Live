@@ -1,114 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Code-editor-live">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="theme-color" content="#0f172a">
-    <meta name="msapplication-navbutton-color" content="#0f172a">
-    <title>Browser IDE</title>
-    <meta name="application-name" content="Receipt Generator Pro">
-    <meta name="msapplication-TileColor" content="#0f172a">
-    <meta name="format-detection" content="telephone=yes">
-    <script type="monaco-editor" src="https://unpkg.com/monaco-editor@0.45.0/min/vs/loader.js"></script>    
-    <script type="module">
-        import "./core/projectManager.js";
-        import "./core/renderer.js";
-        import "./core/modeController.js";
-        import "./ui/editorPanel.js";
-        import "./ui/fileNavigator.js";
-        import "./visualization/dependencyGraph.js";
-        import "./backend/mockServer.js";
-    </script>    
-    
-    <style>
-        body {
-    margin: 0;
-    display: flex;
-    flex-direction: row; /* main layout */
-    height: 100vh;
-    width: 100vw;
-    overflow: hidden;
-    font-family: sans-serif;
-}
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Browser IDE</title>
 
-#preview {
-    flex: 1 1 50%;
-    min-width: 200px;
-    border: none;
-}
+  <!-- Monaco -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/monaco-editor@0.55.1/min/vs/editor/editor.main.css" />
+  <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.55.1/min/vs/loader.min.js"></script>
 
-#modeBar {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    z-index: 10;
-}
+  <!-- Cytoscape.js CDN (latest stable 3.33.1 as of 2026) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.33.1/cytoscape.min.js"></script>
 
-button {
-    display: block;
-    width: 100%;
-    margin-bottom: 5px;
-}
+  <!-- highlight.js for textarea fallback syntax -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/styles/vs2015.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/highlight.min.js"></script>
 
-canvas {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    width: 300px;
-    height: 200px;
-    background: #000;
-}
-
-canvas#graph {
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-}
-
-@media (max-width: 800px) {
-    body {
-        flex-direction: column;
-    }
-
-    #navigator {
-        flex: 0 0 auto;
-        width: 100%;
-        min-width: 0;
-        height: 120px;
-        display: flex;
-        overflow-x: auto;
-    }
-
-    #editor,
-    #preview {
-        flex: 1 1 50%;
-        width: 100%;
-        height: 50%;
-    }
-}
-    </style>
+  <link rel="stylesheet" href="style.css" />
 </head>
-
-    
 <body>
-    <div id="navigator"></div>
-    <div id="editor"></div>
-    <iframe id="preview"></iframe>
-    <canvas id="graph"></canvas>
-    <div id="modeBar">
-        <select id="modeSelector">
-            <option value="monolithic">Monolithic</option>
-            <option value="modular">Modular</option>
-            <option value="fullstack">Fullstack</option>
-        </select>
+  <header>
+    <h1>Browser IDE</h1>
+    <div class="controls">
+      <select id="mode-select">
+        <option value="monolithic">Monolithic</option>
+        <option value="modular">Modular</option>
+        <option value="fullstack">Fullstack</option>
+      </select>
+      <button id="new-html">+ HTML</button>
+      <button id="new-css">+ CSS</button>
+      <button id="new-js">+ JS</button>
+      <button id="save-files">Save</button>
+      <button id="refresh-graph">Refresh Graph</button>
+      <button id="load-users">Load Users (Mock)</button>
+      <button id="clear-all">Clear All</button>
     </div>
-</body>
-        
-</html>
+  </header>
 
+  <main class="layout">
+    <aside class="file-nav">
+      <h3>Files</h3>
+      <ul id="file-list"></ul>
+    </aside>
+
+    <section class="editor-section">
+      <div id="editor-container"></div>
+      <textarea id="fallback-textarea" spellcheck="false"></textarea>
+    </section>
+
+    <aside class="preview-section">
+      <h3>Live Preview</h3>
+      <iframe id="preview-frame" sandbox="allow-scripts allow-same-origin allow-modals"></iframe>
+      <div id="preview-errors" class="error-box"></div>
+    </aside>
+  </main>
+
+  <section class="graph-section">
+    <h3>Dependency Graph (Cytoscape)</h3>
+    <div id="dependency-graph" style="height:400px; border:1px solid #ccc;"></div>
+  </section>
+
+  <script src="script.js"></script>
+</body>
+</html>
