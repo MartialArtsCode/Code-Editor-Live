@@ -1,3 +1,18 @@
+document.addEventListener('DOMContentLoaded', () => {
+  // ... existing init ...
+  initTheme();
+  loadMockRoutes();
+
+  document.getElementById('new-file').onclick = addNewFile;
+  document.getElementById('export-zip').onclick = exportToZip;
+  document.getElementById('mock-api-btn').onclick = openMockModal;
+  document.getElementById('theme-toggle').onclick = toggleTheme;
+
+  // Modal events
+  document.getElementById('add-route-btn').onclick = () => { /* add route logic */ };
+  document.getElementById('close-modal').onclick = () => document.getElementById('mock-modal').close();
+});
+
 function updatePreview() {
   const frame = document.getElementById('preview-frame');
   const doc = frame.contentDocument || frame.contentWindow.document;
