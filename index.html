@@ -8,11 +8,91 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#0f172a">
     <meta name="msapplication-navbutton-color" content="#0f172a">
-    <link type="stylesheet" href="style.css">
     <title>Browser IDE</title>
     <meta name="application-name" content="Receipt Generator Pro">
     <meta name="msapplication-TileColor" content="#0f172a">
-    <meta name="format-detection" content="telephone=yes">   
+    <meta name="format-detection" content="telephone=yes">
+    <script type="monaco-editor" src="https://unpkg.com/monaco-editor@0.45.0/min/vs/loader.js"></script>    
+    <script type="module">
+        import "./core/projectManager.js";
+        import "./core/renderer.js";
+        import "./core/modeController.js";
+        import "./ui/editorPanel.js";
+        import "./ui/fileNavigator.js";
+        import "./visualization/dependencyGraph.js";
+        import "./backend/mockServer.js";
+    </script>    
+    
+    <style>
+        body {
+    margin: 0;
+    display: flex;
+    flex-direction: row; /* main layout */
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    font-family: sans-serif;
+}
+
+#preview {
+    flex: 1 1 50%;
+    min-width: 200px;
+    border: none;
+}
+
+#modeBar {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 10;
+}
+
+button {
+    display: block;
+    width: 100%;
+    margin-bottom: 5px;
+}
+
+canvas {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 300px;
+    height: 200px;
+    background: #000;
+}
+
+canvas#graph {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+@media (max-width: 800px) {
+    body {
+        flex-direction: column;
+    }
+
+    #navigator {
+        flex: 0 0 auto;
+        width: 100%;
+        min-width: 0;
+        height: 120px;
+        display: flex;
+        overflow-x: auto;
+    }
+
+    #editor,
+    #preview {
+        flex: 1 1 50%;
+        width: 100%;
+        height: 50%;
+    }
+}
+    </style>
 </head>
 
     
@@ -29,17 +109,6 @@
         </select>
     </div>
 </body>
-    
-    <script src="https://unpkg.com/monaco-editor@0.45.0/min/vs/loader.js"></script>
-    <script type="module">
-        import "./core/projectManager.js";
-        import "./core/renderer.js";
-        import "./core/modeController.js";
-        import "./ui/editorPanel.js";
-        import "./ui/fileNavigator.js";
-        import "./visualization/dependencyGraph.js";
-        import "./backend/mockServer.js";
-    </script>
-    
+        
 </html>
 
