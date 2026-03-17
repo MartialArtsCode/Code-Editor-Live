@@ -1,3 +1,4 @@
+function init cy ={
 let cy = null;
 
 function parseDependencies() {
