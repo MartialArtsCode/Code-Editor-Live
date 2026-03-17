@@ -61,7 +61,7 @@ function updateGraph() {
             { selector: 'node', style: { 'background-color': '#90caf9', 'label': 'data(label)', 'text-valign': 'center', 'color': '#000' } },
             { selector: 'edge', style: { 'width': 2, 'line-color': '#555', 'target-arrow-color': '#555', 'target-arrow-shape': 'triangle', 'curve-style': 'bezier' } }
         ],
-        layout: { name: 'dagre', rankDir: 'TB', nodeSep: 40 }
+        layout: { name: 'breadthfirst', directed: true, padding: 30, spacingFactor: 1.5 }
     });
 
     cy.fit(); // Adjust the viewport
