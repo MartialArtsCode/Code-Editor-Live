@@ -15,22 +15,27 @@
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
-  <header>
-    <h1>Browser IDE</h1>
-    <div class="controls">
-      <select id="mode-select" aria-label="Project mode">
+  <header class="header">
+    <div class="title">Live Code Editor</div>
+    <nav class="nav">
+      <select id="mode-select" class="dropdownbtn" aria-label="Project Mode">
         <option value="monolithic">Monolithic</option>
         <option value="modular">Modular</option>
         <option value="fullstack">Fullstack</option>
       </select>
-      <button id="new-file">+ 📁 New File</button>
-      <button id="save-files">💾 Save</button>
-      <button id="export-zip">📦 Export ZIP</button>
-      <button id="refresh-graph">🔄 Refresh Graph</button>
-      <button id="mock-api-btn">🛠️ Mock API</button>
-      <button id="theme-toggle">🌙</button>
-      <button id="load-users">👥 Load Users</button>
-      <button id="clear-all">🗑️ Clear All</button>
+    </nav>
+    <nav class="nav">
+      <select id="file-select" class="dropdownbtn" aria-label="Select File">
+        <button id="new-file">+ 📁 New File</button>
+        <button id="save-files">💾 Save</button>
+        <button id="export-zip">📦 Export ZIP</button>
+        <button id="refresh-graph">🔄 Refresh Graph</button>
+        <button id="mock-api-btn">🛠️ Mock API</button>
+        <button id="theme-toggle">🌙</button>
+        <button id="load-users">👥 Load Users</button>
+        <button id="clear-all">🗑️ Clear All</button>
+      </select>
+    </nav>
     </div>
   </header>
 
