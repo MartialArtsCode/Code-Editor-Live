@@ -9,14 +9,10 @@ function addNewFile() {
     const ext = path.split('.').pop().toLowerCase();
     const defaultContent = getDefaultContent(ext);
     
-    if (defaultContent) {
-        files[path] = defaultContent;
-        updateFileList();
-        switchFile(path);
-        saveToStorage();
-    } else {
-        alert("Unsupported file type.");
-    }
+    files[path] = defaultContent;
+    updateFileList();
+    switchFile(path);
+    saveToStorage();
 }
 
 function getDefaultContent(ext) {
@@ -25,14 +21,20 @@ function getDefaultContent(ext) {
             return '<!DOCTYPE html>\n<html><head><title>New</title></head><body><h1>Hello</h1></body></html>';
         case 'css':
             return '/* New styles */\nbody {}';
+        case 'js':
+            return '// JavaScript\nconsole.log("Hello");';
+        case 'ts':
+            return '// TypeScript\nconsole.log("Hello");';
         case 'py':
             return 'print("Hello from Python")';
         case 'json':
             return '{\n  "key": "value"\n}';
         case 'md':
             return '# Markdown';
+        case 'yaml': case 'yml':
+            return '# YAML config\nkey: value';
         default:
-            return null;
+            return '';
     }
 }
 
@@ -72,7 +74,7 @@ function createFileListItem(ul, file) {
     });
 
     li.onclick = e => {
-        if (e.target.tagName !== 'BUTTON') switchFile(file;
+        if (e.target.tagName !== 'BUTTON') switchFile(file);
     };
 
     ul.appendChild(li);
@@ -135,22 +137,6 @@ function switchFile(file) {
         monaco.editor.setModelLanguage(window.monacoEditor.getModel(), getLanguage(file));
     }
     updatePreview();
-}
-
-function addNewFile(type) {
-    const ext = type === 'html' ? '.html' : type === 'css' ? '.css' : '.js';
-    let name = createUniqueFileName(ext);
-    files[name] = getDefaultContent(type);
-    updateFileList();
-    switchFile(name);
-    saveToStorage();
-}
-
-function createUniqueFileName(ext) {
-    let name = `untitled${ext}`;
-    let i = 1;
-    while (files[name]) name = `untitled${i++}${ext}`;
-    return name;
 }
 
 function getLanguage(file) {
