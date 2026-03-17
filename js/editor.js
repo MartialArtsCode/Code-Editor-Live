@@ -3,43 +3,53 @@ require.config({ paths: { vs: 'https://cdn.jsdelivr.net/npm/monaco-editor@0.55.1
 let monacoEditor = null;
 
 function initMonaco() {
-  if (isMobile) return;
-  require(['vs/editor/editor.main'], () => {
-    if (monacoEditor) monacoEditor.dispose();
-    if (!currentFile) return;
+    // Exit if on mobile or no current file
+    if (isMobile || !currentFile) return;
 
-    monacoEditor = monaco.editor.create(document.getElementById('editor-container'), {
-      value: files[currentFile] || '',
-      language: getLanguage(currentFile),
-      theme: 'vs-dark',
-      automaticLayout: true,
-      minimap: { enabled: false },
-      fontSize: 14,
-      tabSize: 2
-    });
+    require(['vs/editor/editor.main'], () => {
+        // Dispose of previous editor instance if exists
+        if (monacoEditor) monacoEditor.dispose();
 
-    monacoEditor.onDidChangeModelContent(() => {
-      if (currentFile) {
-        files[currentFile] = monacoEditor.getValue();
-        debounceSave();
-        updatePreview();
-        updateGraph();
-      }
+        // Create new Monaco editor instance
+        monacoEditor = monaco.editor.create(document.getElementById('editor-container'), {
+            value: files[currentFile] || '',
+            language: getLanguage(currentFile),
+            theme: 'vs-dark',
+            automaticLayout: true,
+            minimap: { enabled: false },
+            fontSize: 14,
+            tabSize: 2
+        });
+
+        // Handle content change events
+        monacoEditor.onDidChangeModelContent(() => {
+            updateFileContent();
+        });
     });
-  });
 }
 
 function initFallbackTextarea() {
-  if (!isMobile) return;
-  const ta = document.getElementById('fallback-textarea');
-  ta.value = files[currentFile] || '';
-  ta.oninput = () => {
+    // Initialize fallback textarea for mobile
+    if (!isMobile) return;
+
+    const ta = document.getElementById('fallback-textarea');
+    ta.value = files[currentFile] || '';
+
+    ta.oninput = () => {
+        updateFileContent(ta.value);
+    };
+
+    ta.onblur = () => {
+        hljs.highlightElement(ta);
+    };
+}
+
+// Function to update file content and trigger necessary actions
+function updateFileContent(value) {
     if (currentFile) {
-      files[currentFile] = ta.value;
-      debounceSave();
-      updatePreview();
-      updateGraph();
+        files[currentFile] = value || monacoEditor.getValue();
+        debounceSave();
+        updatePreview();
+        updateGraph();
     }
-  };
-  ta.onblur = () => hljs.highlightElement(ta);
 }
