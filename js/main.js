@@ -18,10 +18,9 @@ document.addEventListener('DOMContentLoaded'), () => {
     initFallbackTextarea();
     updatePreview();
     updateGraph();
-});
 
-// Function to setup event handlers
-function setupEventHandlers() {
+    // Function to setup event handlers
+    function setupEventHandlers() {
     // File actions dropdown
     const fileSelect = document.getElementById('file-select');
     fileSelect.onchange = e => {
@@ -49,7 +48,7 @@ function setupEventHandlers() {
     document.getElementById('close-modal').onclick = () => document.getElementById('mock-modal').close();
 
     document.addEventListener('click', closeContextMenus);
-}
+    }
 
 // Function to find the initial file to switch to
 function findInitialFile() {
