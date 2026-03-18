@@ -105,4 +105,4 @@ function handleAddRoute() {
     // Clear form inputs
     document.getElementById('route-path').value = '';
     document.getElementById('route-response').value = '';
-}
+});
