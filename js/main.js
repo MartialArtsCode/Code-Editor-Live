@@ -1,11 +1,11 @@
-document.addEventListener('DOMContentLoaded'), () => {
+document.addEventListener('DOMContentLoaded', () => {
     initTheme();
     loadMockRoutes();
     loadFromStorage();
 
     // Assigning event handlers
-    const setupEventHandlers();
-        if (Object.keys(files).length === 0) {
+    setupEventHandlers(); // Changed to call function correctly
+    if (Object.keys(files).length === 0) { // Added braces
         loadMode('monolithic', true);
     }
 
@@ -20,88 +20,89 @@ document.addEventListener('DOMContentLoaded'), () => {
     updateGraph();
 
     // Function to setup event handlers
-    function setupEventHandlers() {
-    // File actions dropdown
-    const fileSelect = document.getElementById('file-select');
-    fileSelect.onchange = e => {
-        const action = e.target.value;
-        // Reset dropdown to placeholder after action
-        e.target.selectedIndex = 0;
+    const setupEventHandlers = () => { // Corrected function declaration
+        // File actions dropdown
+        const fileSelect = document.getElementById('file-select');
+        fileSelect.onchange = e => {
+            const action = e.target.value;
+            // Reset dropdown to placeholder after action
+            e.target.selectedIndex = 0;
 
-        switch (action) {
-            case 'new-file':    addNewFile(); break;
-            case 'save-files':  saveToStorage(); break;
-            case 'export-zip':  exportToZip(); break;
-            case 'refresh-graph': updateGraph(); break;
-            case 'mock-api':    openMockModal(); break;
-            case 'theme-toggle': toggleTheme(); break;
-            case 'load-users':  loadUsers(); break;
-            case 'clear-all':   clearAllData(); break;
-        }
+            switch (action) {
+                case 'new-file': addNewFile(); break;
+                case 'save-files': saveToStorage(); break;
+                case 'export-zip': exportToZip(); break;
+                case 'refresh-graph': updateGraph(); break;
+                case 'mock-api': openMockModal(); break;
+                case 'theme-toggle': toggleTheme(); break;
+                case 'load-users': loadUsers(); break;
+                case 'clear-all': clearAllData(); break;
+            }
+        };
+
+        // Mode selector
+        document.getElementById('mode-select').onchange = e => loadMode(e.target.value);
+
+        // Modal events
+        document.getElementById('add-route-btn').onclick = handleAddRoute;
+        document.getElementById('close-modal').onclick = () => document.getElementById('mock-modal').close();
+
+        document.addEventListener('click', closeContextMenus);
     };
 
-    // Mode selector
-    document.getElementById('mode-select').onchange = e => loadMode(e.target.value);
-
-    // Modal events
-    document.getElementById('add-route-btn').onclick = handleAddRoute;
-    document.getElementById('close-modal').onclick = () => document.getElementById('mock-modal').close();
-
-    document.addEventListener('click', closeContextMenus);
+    // Function to find the initial file to switch to
+    function findInitialFile() {
+        return Object.keys(files).find(f => f.endsWith('.html'));
     }
 
-// Function to find the initial file to switch to
-function findInitialFile() {
-    return Object.keys(files).find(f => f.endsWith('.html'));
-}
-
-// Function to load users via API
-async function loadUsers() {
-    try {
-        const res = await fetch('/api/users');
-        const data = await res.json();
-        alert('Mock users:\n' + data.map(u => u.name).join('\n'));
-    } catch (err) {
-        alert('Error: ' + err.message);
-    }
-}
-
-// Function to clear all data
-function clearAllData() {
-    if (confirm('Clear everything?')) {
-        localStorage.removeItem('browser-ide-files');
-        location.reload();
-    }
-}
-
-// Function to close context menus when clicking outside
-function closeContextMenus(e) {
-    if (!e.target.closest('.file-nav li')) {
-        document.querySelectorAll('.context-menu').forEach(m => m.style.display = 'none');
-    }
-}
-
-// Function to handle adding a new route
-function handleAddRoute() {
-    const method = document.getElementById('route-method').value;
-    const path = document.getElementById('route-path').value.trim();
-    const response = document.getElementById('route-response').value.trim();
-    if (!path || !response) return;
-
-    // Validate JSON
-    try {
-        JSON.parse(response);
-    } catch {
-        alert('Response must be valid JSON.');
-        return;
+    // Function to load users via API
+    async function loadUsers() {
+        try {
+            const res = await fetch('/api/users');
+            const data = await res.json();
+            alert('Mock users:\n' + data.map(u => u.name).join('\n'));
+        } catch (err) {
+            alert('Error: ' + err.message);
+        }
     }
 
-    const key = `${method} ${path}`;
-    mockRoutes[key] = response;
-    saveMockRoutes();
-    renderRoutesList();
+    // Function to clear all data
+    function clearAllData() {
+        if (confirm('Clear everything?')) {
+            localStorage.removeItem('browser-ide-files');
+            location.reload();
+        }
+    }
 
-    // Clear form inputs
-    document.getElementById('route-path').value = '';
-    document.getElementById('route-response').value = '';
+    // Function to close context menus when clicking outside
+    function closeContextMenus(e) {
+        if (!e.target.closest('.file-nav li')) {
+            document.querySelectorAll('.context-menu').forEach(m => m.style.display = 'none');
+        }
+    }
+
+    // Function to handle adding a new route
+    function handleAddRoute() {
+        const method = document.getElementById('route-method').value;
+        const path = document.getElementById('route-path').value.trim();
+        const response = document.getElementById('route-response').value.trim();
+        if (!path || !response) return;
+
+        // Validate JSON
+        try {
+            JSON.parse(response);
+        } catch {
+            alert('Response must be valid JSON.');
+            return;
+        }
+
+        const key = `${method} ${path}`;
+        mockRoutes[key] = response;
+        saveMockRoutes();
+        renderRoutesList();
+
+        // Clear form inputs
+        document.getElementById('route-path').value = '';
+        document.getElementById('route-response').value = '';
+    }
 });
