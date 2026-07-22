@@ -1,7 +1,11 @@
 document.addEventListener('DOMContentLoaded', () => {
     initTheme();
+    loadSettings();
     loadMockRoutes();
     loadFromStorage();
+    initVersioning();
+    initFileImport();
+    initKeyboardShortcuts();
 
     // Setup event handlers
     setupEventHandlers();
@@ -31,10 +35,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
             switch (action) {
                 case 'new-file': addNewFile(); break;
-                case 'save-files': saveToStorage(); break;
+                case 'import-files': openFileImporter(); break;
+                case 'import-zip': importFromZip(); break;
+                case 'save-files': saveToStorage(); showNotification('Files saved!'); break;
                 case 'export-zip': exportToZip(); break;
+                case 'format-code': formatCode(); break;
+                case 'minify-code': minifyCode(); break;
+                case 'snippets': openSnippetLibrary(); break;
+                case 'templates': openTemplateSelector(); break;
                 case 'refresh-graph': updateGraph(); break;
                 case 'mock-api': openMockModal(); break;
+                case 'settings': openSettingsModal(); break;
                 case 'theme-toggle': toggleTheme(); break;
                 case 'load-users': loadUsers(); break;
                 case 'clear-all': clearAllData(); break;
@@ -71,6 +82,8 @@ document.addEventListener('DOMContentLoaded', () => {
     function clearAllData() {
         if (confirm('Clear everything?')) {
             localStorage.removeItem('browser-ide-files');
+            localStorage.removeItem('file-history');
+            localStorage.removeItem('editor-settings');
             location.reload();
         }
     }
