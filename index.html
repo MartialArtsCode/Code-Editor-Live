@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Browser IDE</title>
+  <title>Browser IDE - Enhanced</title>
 
   <!-- Dependencies -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.33.1/cytoscape.min.js"></script>
@@ -13,10 +13,11 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/styles/vs2015.min.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/monaco-editor@0.55.1/min/vs/editor/editor.main.css" />
   <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/features.css" />
 </head>
 <body>
   <header class="header">
-    <div class="title">&#60;/&#62; Live Code Editor</div>
+    <div class="title">&#60;/&#62; Live Code Editor v2.0</div>
     <nav class="nav">
       <label for="mode-select">Mode:</label>
       <select id="mode-select" aria-label="Project Mode">
@@ -30,13 +31,20 @@
       <select id="file-select" aria-label="File Actions">
         <option value="" disabled selected>Select Action</option>
         <option value="new-file">+ New File</option>
-        <option value="save-files">Save</option>
-        <option value="export-zip">Export ZIP</option>
-        <option value="refresh-graph">Refresh Graph</option>
-        <option value="mock-api">Mock API</option>
-        <option value="theme-toggle">Toggle Theme</option>
-        <option value="load-users">Load Users</option>
-        <option value="clear-all">Clear All</option>
+        <option value="import-files">📥 Import Files</option>
+        <option value="import-zip">📦 Import ZIP</option>
+        <option value="save-files">💾 Save</option>
+        <option value="export-zip">📤 Export ZIP</option>
+        <option value="format-code">✨ Format Code</option>
+        <option value="minify-code">📦 Minify Code</option>
+        <option value="snippets">📚 Snippets</option>
+        <option value="templates">🎨 Templates</option>
+        <option value="refresh-graph">🔄 Refresh Graph</option>
+        <option value="mock-api">🌐 Mock API</option>
+        <option value="settings">⚙️ Settings</option>
+        <option value="theme-toggle">🌙 Toggle Theme</option>
+        <option value="load-users">👥 Load Users</option>
+        <option value="clear-all">🗑️ Clear All</option>
       </select>
     </nav>
   </header>
@@ -50,6 +58,13 @@
     <section class="editor-section">
       <div id="editor-container"></div>
       <textarea id="fallback-textarea" spellcheck="false" placeholder="Write your code here"></textarea>
+      <div id="console-panel">
+        <div id="console-header">
+          <strong>📟 Console Output</strong>
+          <button onclick="clearConsole()" style="padding: 2px 8px; font-size: 12px;">Clear</button>
+        </div>
+        <div id="console-output"></div>
+      </div>
     </section>
 
     <aside class="preview-section">
@@ -83,6 +98,7 @@
     <button id="close-modal">❌ Close</button>
   </dialog>
 
+  <!-- Core Scripts -->
   <script src="js/modes.js"></script>
   <script src="js/files.js"></script>
   <script src="js/themes.js"></script>
@@ -91,6 +107,18 @@
   <script src="js/editor.js"></script>
   <script src="js/preview.js"></script>
   <script src="js/graph.js"></script>
+  
+  <!-- New Feature Scripts (v2.0) -->
+  <script src="js/settings.js"></script>
+  <script src="js/shortcuts.js"></script>
+  <script src="js/console.js"></script>
+  <script src="js/versioning.js"></script>
+  <script src="js/import.js"></script>
+  <script src="js/templates.js"></script>
+  <script src="js/formatter.js"></script>
+  <script src="js/snippets.js"></script>
+  
+  <!-- Main Script -->
   <script src="js/main.js"></script>
 </body>
 </html>
