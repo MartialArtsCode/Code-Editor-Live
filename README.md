@@ -1,12 +1,11 @@
-# GitHub Pages Web IDE & Snippet Playground
+# GitHub Pages Browser IDE
 
-A browser-based IDE engineered for **GitHub Pages**.
+A modular browser IDE hosted directly on GitHub Pages.
 
 ## Features
-- **Virtual File System (VFS):** Create folders (`folder/`), create files, and delete non-essential files to focus on specific code tests.
-- **Persistent State:** Uses browser `localStorage` to save file edits across reloads.
-- **Multi-Language Support:**
-  - **JavaScript / HTML / React:** Live execution using dynamic sandbox previews.
-  - **Python:** Client-side execution powered by **Pyodide (WebAssembly CPython)**.
-  - **Bash & C++:** Reference starter templates and snippet libraries with built-in explanations.
-- **Snippet Library:** Side-panel with production-ready snippets that insert directly into the active editor.
+- **ES6 Module Architecture:** Modular layout (`/js` directory) using native ES module imports.
+- **In-Browser File Management:** Create folders/files, delete unwanted target scripts, and save progress in `localStorage`.
+- **Client-Side Execution:**
+  - **HTML/JS/React:** Live sandboxed `iframe` preview.
+  - **Python:** Client-side WebAssembly execution powered by Pyodide.
+- **Snippet Library:** One-click insertable snippets across JS, Python, C++, and Bash.
