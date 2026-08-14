@@ -1,110 +1,42 @@
-// Code snippets library
-const codeSnippets = {
-    javascript: [
-        {
-            name: 'Arrow Function',
-            code: 'const myFunction = () => {\n  // function body\n};'
-        },
-        {
-            name: 'Fetch API',
-            code: 'fetch("/api/data")\n  .then(response => response.json())\n  .then(data => console.log(data))\n  .catch(error => console.error(error));'
-        },
-        {
-            name: 'Event Listener',
-            code: 'document.addEventListener("DOMContentLoaded", () => {\n  console.log("Document loaded");\n});'
-        },
-        {
-            name: 'Promise',
-            code: 'const promise = new Promise((resolve, reject) => {\n  if (true) resolve("Success");\n  else reject("Error");\n});'
-        },
-        {
-            name: 'Async/Await',
-            code: 'async function fetchData() {\n  try {\n    const response = await fetch("/api/data");\n    const data = await response.json();\n    console.log(data);\n  } catch (error) {\n    console.error(error);\n  }\n}'
-        }
-    ],
-    html: [
-        {
-            name: 'HTML Template',
-            code: '<!DOCTYPE html>\n<html lang="en">\n<head>\n  <meta charset="UTF-8">\n  <title>Page Title</title>\n</head>\n<body>\n  <h1>Hello World</h1>\n</body>\n</html>'
-        },
-        {
-            name: 'Form',
-            code: '<form action="/submit" method="POST">\n  <label for="name">Name:</label>\n  <input type="text" id="name" name="name" required>\n  <button type="submit">Submit</button>\n</form>'
-        },
-        {
-            name: 'Responsive Meta Tags',
-            code: '<meta charset="UTF-8">\n<meta name="viewport" content="width=device-width, initial-scale=1.0">\n<meta name="description" content="Page description">'
-        }
-    ],
-    css: [
-        {
-            name: 'Flexbox Container',
-            code: '.container {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  height: 100vh;\n}'
-        },
-        {
-            name: 'Grid Layout',
-            code: '.grid {\n  display: grid;\n  grid-template-columns: repeat(3, 1fr);\n  gap: 16px;\n}'
-        },
-        {
-            name: 'Media Query',
-            code: '@media (max-width: 768px) {\n  .container {\n    flex-direction: column;\n  }\n}'
-        },
-        {
-            name: 'Animation',
-            code: '@keyframes slideIn {\n  from { transform: translateX(-100%); }\n  to { transform: translateX(0); }\n}\n.animated { animation: slideIn 0.3s ease; }'
-        }
-    ],
-    python: [
-        {
-            name: 'Function Definition',
-            code: 'def greet(name):\n    return f"Hello, {name}!"'
-        },
-        {
-            name: 'List Comprehension',
-            code: 'squares = [x**2 for x in range(10)]'
-        },
-        {
-            name: 'Try Except',
-            code: 'try:\n    result = 10 / 0\nexcept ZeroDivisionError:\n    print("Cannot divide by zero")'
-        }
-    ]
+window.LANGUAGE_SNIPPETS = {
+  javascript: [
+    {
+      title: "Fetch API (Async/Await)",
+      description: "Clean asynchronous HTTP requests with try/catch error handling.",
+      code: `async function loadData(url) {\n  try {\n    const res = await fetch(url);\n    const data = await res.json();\n    console.log(data);\n  } catch (err) {\n    console.error("Fetch Error:", err);\n  }\n}`
+    },
+    {
+      title: "LocalStorage Helper",
+      description: "Safely read and write JSON data to browser local storage.",
+      code: `const Storage = {\n  get: (k, def) => JSON.parse(localStorage.getItem(k)) || def,\n  set: (k, v) => localStorage.setItem(k, JSON.stringify(v))\n};`
+    }
+  ],
+  react: [
+    {
+      title: "Custom Hook (LocalStorage)",
+      description: "State persistence hook for React apps on static pages.",
+      code: `function useLocalStorage(key, initial) {\n  const [val, setVal] = React.useState(() => {\n    const saved = localStorage.getItem(key);\n    return saved ? JSON.parse(saved) : initial;\n  });\n  React.useEffect(() => {\n    localStorage.setItem(key, JSON.stringify(val));\n  }, [key, val]);\n  return [val, setVal];\n}`
+    }
+  ],
+  python: [
+    {
+      title: "List Comprehension & Filtering",
+      description: "Concise array transformation and conditional extraction.",
+      code: `data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]\nevens_squared = [x**2 for x in data if x % 2 == 0]\nprint("Evens Squared:", evens_squared)`
+    }
+  ],
+  bash: [
+    {
+      title: "Directory & Argument Check",
+      description: "Validates path argument before listing files in loop.",
+      code: `#!/bin/bash\nTARGET="\${1:-.}"\nif [ ! -d "$TARGET" ]; then\n  echo "Directory not found!"\n  exit 1\nfi\nfor file in "$TARGET"/*; do\n  echo "Found: $(basename "$file")"\ndone`
+    }
+  ],
+  cpp: [
+    {
+      title: "Vector with Smart Pointers",
+      description: "Modern C++ dynamic memory management without raw pointers.",
+      code: `#include <iostream>\n#include <vector>\n#include <memory>\n\nstruct Node { std::string name; };\n\nint main() {\n    std::vector<std::unique_ptr<Node>> list;\n    list.push_back(std::make_unique<Node>(Node{"GitHub Pages"}));\n    std::cout << list[0]->name << std::endl;\n    return 0;\n}`
+    }
+  ]
 };
-
-function openSnippetLibrary() {
-    const fileExt = currentFile ? currentFile.split('.').pop().toLowerCase() : 'javascript';
-    const snippets = codeSnippets[fileExt] || codeSnippets.javascript;
-    
-    let html = `<h3>Code Snippets (${fileExt})</h3>`;
-    snippets.forEach((snippet, index) => {
-        html += `<div style="padding: 8px; border-bottom: 1px solid #ddd; cursor: pointer;" 
-            onclick="insertSnippet('${snippet.code.replace(/'/g, "\\'")}'); this.closest('dialog').close();">
-            <strong>${snippet.name}</strong>
-            <pre style="font-size: 11px; margin-top: 4px; background: #f0f0f0; padding: 4px; border-radius: 3px;">${escapeHtml(snippet.code)}</pre>
-        </div>`;
-    });
-    
-    const dialog = document.createElement('dialog');
-    dialog.innerHTML = html + '<button onclick="this.close()">Close</button>';
-    dialog.style.cssText = 'width: 500px; max-width: 90vw; max-height: 80vh; overflow-y: auto;';
-    document.body.appendChild(dialog);
-    dialog.showModal();
-}
-
-function insertSnippet(code) {
-    if (!window.monacoEditor) return;
-    
-    const position = window.monacoEditor.getPosition();
-    const range = new monaco.Range(position.lineNumber, position.column, position.lineNumber, position.column);
-    
-    window.monacoEditor.executeEdits('insert-snippet', [
-        { range: range, text: code }
-    ]);
-    
-    showNotification('Snippet inserted');
-}
-
-function escapeHtml(text) {
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
-}
