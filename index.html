@@ -5,27 +5,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Browser IDE & Snippet Playground</title>
   
-  <!-- CSS Stylesheet from /css folder -->
   <link rel="stylesheet" href="css/styles.css" />
   
-  <!-- React & ReactDOM CDNs -->
+  <!-- React & ReactDOM -->
   <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-  
-  <!-- Babel for client-side JSX transpilation -->
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   
   <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
   
-  <!-- Pyodide WebAssembly Python Engine -->
+  <!-- Pyodide WebAssembly Engine -->
   <script src="https://cdn.jsdelivr.net/pyodide/v0.26.1/full/pyodide.js"></script>
 </head>
 <body>
   <div id="root"></div>
 
-  <!-- Modular Scripts from /js folder -->
-  <script type="text/babel" src="js/snippets.js"></script>
-  <script type="text/babel" src="js/app.js"></script>
+  <!-- Native ES Module Entry Point -->
+  <script type="module" src="js/main.js"></script>
 </body>
 </html>
