@@ -1,15 +1,11 @@
-# macOS
+# OS Metadata
 .DS_Store
-.AppleDouble
-.LSOverride
+Thumbs.db
 
-# Editors
+# Node dependencies (if add local tooling)
+node_modules/
+npm-debug.log*
+
+# Local Editor Configuration
 .vscode/
 .idea/
-*.sublime-project
-*.sublime-workspace
-
-# Logs
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
