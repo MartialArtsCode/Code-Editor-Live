@@ -1,25 +1,18 @@
+<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Browser IDE & Snippet Playground</title>
+  <title>Browser IDE</title>
   <link rel="stylesheet" href="css/styles.css" />
-  
-  <!-- React & ReactDOM -->
-  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
-  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-  
-  <!-- Lucide Icons -->
-  <script src="https://unpkg.com/lucide@latest"></script>
-  
-  <!-- Pyodide WebAssembly Engine -->
-  <script src="https://cdn.jsdelivr.net/pyodide/v0.26.1/full/pyodide.js"></script>
+  <!-- React CDN dependencies -->
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
 </head>
 <body>
   <div id="root"></div>
 
-  <!-- Native ES Module Entry Point -->
+  <!-- MUST BE type="module" -->
   <script type="module" src="js/main.js"></script>
 </body>
 </html>
