@@ -1,3 +1,4 @@
+// main.js
 import { VFS } from './files.js';
 import { SNIPPETS } from './modes.js';
 import { EditorComponent } from './editor.js';
@@ -5,8 +6,9 @@ import { PreviewComponent } from './preview.js';
 import { ThemeManager } from './themes.js';
 import { MockApi } from './mockApi.js';
 
-const { useState, useEffect } = React;
-const e = React.createElement;
+// Access React from global window or ES module import
+const { useState, useEffect } = window.React || React;
+const e = (window.React || React).createElement;
 
 function App() {
   const [files, setFiles] = useState(() => VFS.loadWorkspace());
@@ -21,8 +23,8 @@ function App() {
   }, [files, activeFile, showSnippets]);
 
   useEffect(() => {
-    MockApi.init();
-    ThemeManager.applyTheme("dark");
+    if (MockApi?.init) MockApi.init();
+    if (ThemeManager?.applyTheme) ThemeManager.applyTheme("dark");
 
     async function initPyodide() {
       if (window.loadPyodide) {
@@ -57,6 +59,7 @@ function App() {
   };
 
   const handleContentChange = (val) => {
+    if (!activeFile || !files[activeFile]) return;
     setFiles(prev => ({
       ...prev,
       [activeFile]: { ...prev[activeFile], content: val }
@@ -68,17 +71,19 @@ function App() {
       setOutputConsole("Pyodide Wasm engine loading...");
       return;
     }
+    if (!currentFile?.content) return;
+    
     setOutputConsole("Executing...\n");
     try {
       pyodide.setStdout({ batched: (str) => setOutputConsole(prev => prev + str + "\n") });
-      await pyodide.runPythonAsync(files[activeFile].content);
+      await pyodide.runPythonAsync(currentFile.content);
     } catch (err) {
       setOutputConsole(prev => prev + "\nError: " + err.message);
     }
   };
 
   const insertSnippet = (code) => {
-    if (!activeFile) return;
+    if (!activeFile || !files[activeFile]) return;
     handleContentChange((files[activeFile].content || "") + "\n\n" + code);
   };
 
@@ -89,7 +94,7 @@ function App() {
     e("header", { className: "ide-header" },
       e("div", { className: "ide-title" }, "Browser IDE & Snippet Playground"),
       e("div", { className: "header-actions" },
-        currentFile && currentFile.language === "python" && e("button", { className: "btn", onClick: runPython }, "Run Python"),
+        currentFile?.language === "python" && e("button", { className: "btn", onClick: runPython }, "Run Python"),
         e("button", { className: "btn btn-secondary", onClick: () => setShowSnippets(!showSnippets) }, "Snippets")
       )
     ),
@@ -133,7 +138,7 @@ function App() {
       // Snippets Panel
       showSnippets && e("aside", { className: "snippets-panel" },
         e("h4", { style: { marginBottom: 12, fontSize: 13 } }, "Language Library"),
-        Object.keys(SNIPPETS).map(lang =>
+        Object.keys(SNIPPETS || {}).map(lang =>
           e("div", { key: lang, style: { marginBottom: 16 } },
             e("h5", { style: { fontSize: 11, color: "#888", textTransform: "uppercase" } }, lang),
             SNIPPETS[lang].map((snip, i) =>
@@ -150,5 +155,8 @@ function App() {
   );
 }
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(e(App));
+const container = document.getElementById('root');
+if (container) {
+  const root = (window.ReactDOM || ReactDOM).createRoot(container);
+  root.render(e(App));
+}
