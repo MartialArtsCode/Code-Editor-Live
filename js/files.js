@@ -1,115 +1,71 @@
-export const LANGUAGE_MODES = {
-  javascript: { name: "JavaScript", ext: ".js" },
-  python: { name: "Python", ext: ".py" },
-  react: { name: "React (JSX)", ext: ".jsx" },
-  html: { name: "HTML5", ext: ".html" },
-  bash: { name: "Bash Script", ext: ".sh" },
-  cpp: { name: "C++ Source", ext: ".cpp" },
-  json: { name: "JSON Config", ext: ".json" },
-  css: { name: "CSS Styles", ext: ".css" }
-};
+// js/files.js
 
-export const SKELETONS = {
-  html: `<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-  <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-  <div id="app">
-    <h1>Hello World</h1>
-  </div>
-  <script src="script.js"></script>
-</body>
-</html>`,
+export const VFS = {
+  STORAGE_KEY: "gh_ide_vfs_v2",
 
-  javascript: `// ES6 Standard Module Template
-export function main() {
-  console.log("Initialization complete.");
-}
+  getInitialFiles() {
+    return {
+      "index.html": {
+        name: "index.html",
+        type: "file",
+        language: "html",
+        content: `<!DOCTYPE html>\n<html>\n<head>\n  <style>body { font-family: sans-serif; background: #222; color: #fff; text-align: center; padding-top: 50px; }</style>\n</head>\n<body>\n  <h1>Modular Web IDE</h1>\n  <p>Edit or delete files on the left to customize!</p>\n</body>\n</html>`
+      },
+      "main.py": {
+        name: "main.py",
+        type: "file",
+        language: "python",
+        content: `# Pyodide Python Engine\nitems = ["Python", "JavaScript", "React", "C++", "Bash"]\nprint("Available languages:")\nfor idx, lang in enumerate(items, 1):\n    print(f"{idx}. {lang}")`
+      },
+      "script.js": {
+        name: "script.js",
+        type: "file",
+        language: "javascript",
+        content: `// Clean JS Entry Point\nconsole.log("Script loaded successfully.");`
+      }
+    };
+  },
 
-// Auto-run if main script
-if (typeof window !== "undefined") {
-  main();
-}`,
+  loadWorkspace() {
+    const saved = localStorage.getItem(this.STORAGE_KEY);
+    return saved ? JSON.parse(saved) : this.getInitialFiles();
+  },
 
-  react: `// React Component Skeleton
-export default function Component({ title = "Hello World" }) {
-  const [count, setCount] = React.useState(0);
+  saveWorkspace(files) {
+    localStorage.setItem(this.STORAGE_KEY, JSON.stringify(files));
+  },
 
-  return (
-    <div className="card">
-      <h2>{title}</h2>
-      <button onClick={() => setCount(count + 1)}>
-        Count: {count}
-      </button>
-    </div>
-  );
-}`,
+  createItem(files, pathName, initialContent = null) {
+    if (!pathName) return files;
+    const isFolder = pathName.endsWith("/");
+    const cleanName = isFolder ? pathName.slice(0, -1) : pathName;
+    const ext = cleanName.split('.').pop().toLowerCase();
 
-  python: `#!/usr/bin/env python3
-"""
-Module Description: Entry point script template.
-"""
+    let lang = "javascript";
+    if (ext === "py") lang = "python";
+    if (ext === "jsx" || ext === "tsx") lang = "react";
+    if (ext === "html" || ext === "htm") lang = "html";
+    if (ext === "sh" || ext === "bash") lang = "bash";
+    if (ext === "cpp" || ext === "c") lang = "cpp";
+    if (ext === "json") lang = "json";
+    if (ext === "css") lang = "css";
 
-def main():
-    print("Execution started...")
-    # Add logic here
+    const defaultBody = isFolder ? "" : (initialContent ?? `// ${cleanName}`);
 
-if __name__ == "__main__":
-    main()`,
+    return {
+      ...files,
+      [cleanName]: {
+        name: cleanName,
+        type: isFolder ? "folder" : "file",
+        language: lang,
+        content: defaultBody
+      }
+    };
+  },
 
-  bash: `#!/bin/bash
-# Shell Script Template
-
-set -euo pipefail
-
-echo "==> Starting script execution..."
-
-# Check prerequisites or arguments
-if [ "$#" -eq 0 ]; then
-    echo "Usage: $0 [argument]"
-    exit 1
-fi
-
-echo "Processing $1..."`,
-
-  cpp: `#include <iostream>
-#include <vector>
-#include <string>
-
-int main(int argc, char* argv[]) {
-    std::cout << "Standard C++ Application" << std::endl;
-    return 0;
-}`,
-
-  json: `{
-  "name": "project-config",
-  "version": "1.0.0",
-  "private": true,
-  "settings": {
-    "theme": "dark",
-    "debug": true
+  deleteItem(files, targetName) {
+    const updated = { ...files };
+    delete updated[targetName];
+    return updated;
   }
-}`,
-
-  css: `/* Global Styles Reset & Variables */
-:root {
-  --primary-color: #007acc;
-  --bg-color: #1e1e1e;
-  --text-color: #ffffff;
-}
-
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}`
-};
-
-export const SNIPPETS = {
-  // Existing snippets remain here...
 };
